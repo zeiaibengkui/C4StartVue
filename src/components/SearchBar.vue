@@ -32,7 +32,7 @@ const submit = (e: Event) => {
     console.log(a.href);
     a.click();
 };
-const addEngine = async (e: Event) => {
+const addEngine = async () => {
     engines.value[engines.value.length] = {
         name: await swal({
             text: 'Name',
@@ -52,7 +52,7 @@ defineExpose({
 
 effectScope().run(async () => {
     let a = [target, engines, selectedEngine];
-    a.forEach(async (el: ref, index: number) => {
+    a.forEach(async (el: any, index: number) => {
         var saved: Array<any> | null = await localforage.getItem('search');
         if (saved) el.value = saved[index];
     });

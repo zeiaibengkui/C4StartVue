@@ -6,7 +6,7 @@ const Search: any = ref(null);
 </script>
 
 <template>
-    <header>C4Start Vue</header>
+    <!-- <header>C4Start Vue</header> -->
     <SearchBar ref="Search"></SearchBar>
 </template>
 
