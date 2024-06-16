@@ -50,7 +50,8 @@ defineExpose({
     selectedEngine
 });
 
-effectScope().run(async () => {
+var efSc = effectScope();
+efSc.run(async () => {
     let a = [target, engines, selectedEngine];
     a.forEach(async (el: any, index: number) => {
         var saved: Array<any> | null = await localforage.getItem('search');
@@ -118,6 +119,7 @@ effectScope().run(async () => {
     position: absolute;
     left: 50%;
     top: 50%;
+    background-color: var(--bs-body-bg);
     transform: translate(-50%, -50%);
 }
 </style>

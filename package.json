@@ -17,6 +17,7 @@
         "@popperjs/core": "^2.11.8",
         "axios": "^1.6.8",
         "bootstrap": "^5.3.3",
+        "bootstrap-icons": "^1.11.3",
         "bootstrap-sweetalert": "^1.0.1",
         "jquery": "^3.7.1",
         "jquery-ui": "^1.13.2",

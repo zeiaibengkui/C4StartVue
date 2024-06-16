@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import SearchBar from './components/SearchBar.vue';
-
-const Search: any = ref(null);
+import WallPaper from './components/WallPaper.vue';
+import BootstrapTheme from './components/BootstrapTheme.vue';
+import LoaclForageSettings from './components/LoaclForageSettings.vue';
 </script>
 
 <template>
     <!-- <header>C4Start Vue</header> -->
-    <SearchBar ref="Search"></SearchBar>
+    <WallPaper></WallPaper>
+    <SearchBar></SearchBar>
+    <BootstrapTheme></BootstrapTheme>
+    <LoaclForageSettings></LoaclForageSettings>
 </template>
 
 <style scoped></style>
