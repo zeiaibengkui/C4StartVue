@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import localforage from 'localforage';
-import { effectScope, onMounted, ref, watch } from 'vue';
-import OtherSettings from './OtherSettings.vue';
+import { effectScope,  ref, watch } from 'vue';
+import otherSettings from './OtherSettings.ts';
 
 const bgIframeURL = ref('about:blank');
 const bgIframeDisplay = ref(true);
@@ -36,7 +36,12 @@ effectScope().run(() => {
 </script>
 
 <template>
-    <div id="wallPaper" :style="bgStyle">
+    <div
+        id="wallPaper"
+        :style="bgStyle"
+        data-rcMenu-name="Wallpaper Settings"
+        data-rcMenu-js="$('#wallpaperToggle').click()"
+    >
         <video
             id="bgVideo"
             preload="none"
@@ -55,6 +60,7 @@ effectScope().run(() => {
             class="btn z-1 position-fixed"
             data-bs-toggle="modal"
             data-bs-target="#bgSettings"
+            id="wallpaperToggle"
         >
             <i class="bi bi-sliders"></i>
         </button>
@@ -96,7 +102,14 @@ effectScope().run(() => {
                                 <a class="nav-link" href="#bgStyle">bgStyle</a>
                                 <a class="nav-link" href="#bgIframea">bgIframe</a>
                                 <a class="nav-link" href="#bgVideoa">bgVideo</a>
-                                <OtherSettings></OtherSettings>
+                                <a
+                                    v-for="el in otherSettings"
+                                    data-bs-toggle="modal"
+                                    :key="el.name"
+                                    class="nav-link"
+                                    :href="el.href"
+                                    >{{ el.name }}</a
+                                >
                             </div>
                         </nav>
 

@@ -1,7 +1,7 @@
 import './assets/main.scss';
 import $ from 'jquery';
-window.$ = $;
-window.jQuery = $;
+import 'jquery';
+import 'jquery-ui/dist/jquery-ui.js';
 import 'bootstrap';
 import * as bootstrap from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,3 +24,8 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
 const tooltipList = [...tooltipTriggerList].map(
     (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 );
+
+const otherSettings = [
+    { name: 'bgSettings', href: '#bgSettings' },
+    { name: 'LoaclForageSettings', href: '#LoaclForageSettings' }
+];

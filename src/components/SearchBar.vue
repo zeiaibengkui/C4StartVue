@@ -1,13 +1,15 @@
+<!--suppress ALL -->
 <script setup lang="ts">
 import localforage from 'localforage';
-import { effectScope, ref, watch } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
+import { effectScope, onMounted, ref, watch } from 'vue';
 import swal from 'sweetalert/dist/sweetalert.min.js';
 import 'bootstrap-sweetalert/dist/sweetalert.css';
+import { VueDraggable } from 'vue-draggable-plus'
 
 function toRealValue(value: any) {
     return JSON.parse(JSON.stringify(value));
 }
+
 let target = ref('_blank');
 let text = ref('');
 let engines = ref([
@@ -61,66 +63,87 @@ efSc.run(async () => {
         localforage.setItem('search', toRealValue(newValue));
     });
 });
+
+onMounted(() => {
+    $('#searchBar').draggable({ scroll: false, handle: '.drag' });
+});
+
+const textWidth = ref(300)
+watch(text,function(newValue) {
+    $('#textWidth').text ( newValue);
+    textWidth.value = $('#textWidth').width() + 300;
+})
 </script>
 
 <template>
-    {{
-        (() => {
-            /*console.log(target)*/
-        })()
-    }}
-    <form @submit="submit" id="searchBar" class="input-group shadow">
-        <button
-            class="btn dropdown-toggle btn-outline-secondary"
-            type="button"
-            id="searchEigine"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-        >
-            {{ engines[selectedEngine]?.name }}
-        </button>
+    <div>
+        <form @submit="submit" id="searchBar" class="input-group shadow" :style='{width:textWidth + "px"}'>
+            <button
+                class="btn dropdown-toggle btn-outline-secondary"
+                type="button"
+                id="searchEigine"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                {{ engines[selectedEngine]?.name }}
+            </button>
 
-        <div
-            class="dropdown-menu"
-            aria-labelledby="searchEigine"
-            style="--bs-border-radius: 0.375rem"
-        >
-            <VueDraggable ref="el" v-model="engines">
-                <a
-                    class="dropdown-item"
-                    href="javascript:void(0)"
-                    v-for="(a, index) in engines"
-                    :key="index"
-                    @click="selectedEngine = index"
-                    @contextmenu.prevent="engines.splice(index, 1)"
-                    >{{ a.name }}
-                </a>
-            </VueDraggable>
-            <a class="dropdown-item" id="add" @click="addEngine">[+] Add</a>
-        </div>
+            <div
+                class="dropdown-menu"
+                aria-labelledby="searchEigine"
+                style="--bs-border-radius: 0.375rem"
+            >
+                <VueDraggable ref="el" v-model="engines">
+                    <a
+                        class="dropdown-item"
+                        href="javascript:void(0)"
+                        v-for="(a, index) in engines"
+                        :key="index"
+                        @click="selectedEngine = index"
+                        @contextmenu.prevent="engines.splice(index, 1)"
+                        >{{ a.name }}
+                    </a>
+                </VueDraggable>
+                <a class="dropdown-item" id="add" @click="addEngine" href="#">[+] Add</a>
+            </div>
 
-        <input
-            class="form-control"
-            id="searchText"
-            type="text"
-            v-model="text"
-            placeholder="搜索..."
-        />
-        <input class="btn btn-outline-primary" type="submit" value="GO!" />
-    </form>
+            <input
+                class="form-control"
+                id="searchText"
+                type="text"
+                v-model="text"
+                placeholder="搜索..."
+            />
+            <div id='textWidth'></div>
+            <input class="btn btn-outline-primary" type="submit" value="GO!" />
+        </form>
+    </div>
 </template>
 
 <style scoped lang="scss">
 #searchBar {
-    width: max-content;
+    width: 300px;
+    max-width: 45vw;
     --bs-border-radius: 19px;
     border-radius: var(--bs-border-radius);
-    position: absolute;
-    left: 50%;
-    top: 50%;
     background-color: var(--bs-body-bg);
-    transform: translate(-50%, -50%);
+    position: absolute;
+    //transition: width .1s;
+}
+
+div:has(#searchBar) {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#textWidth{
+    visibility: hidden;
+    position: absolute;
+    width: max-content;
+    max-width: min(60vw,1000px);
 }
 </style>
-async async

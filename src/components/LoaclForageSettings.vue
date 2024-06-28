@@ -36,7 +36,14 @@
                         class="col-3 flex-column align-items-stretch pe-4 border-end me-4"
                         style="width: max-content"
                     >
-                        <OtherSettings></OtherSettings>
+                        <a
+                            v-for="el in otherSettings"
+                            data-bs-toggle="modal"
+                            :key="el.name"
+                            class="nav-link"
+                            :href="el.href"
+                            >{{ el.name }}</a
+                        >
                     </nav>
                     <button
                         class="btn btn-outline-warning"
@@ -78,7 +85,7 @@
 import localforage from 'localforage';
 import swal from 'sweetalert';
 import { ref, watch } from 'vue';
-import OtherSettings from './OtherSettings.vue';
+import otherSettings from './OtherSettings.ts';
 
 const bomb = () => {
     localforage.clear().then(() => {
