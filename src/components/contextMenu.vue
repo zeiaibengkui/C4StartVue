@@ -15,8 +15,11 @@ $(document.body).on('contextmenu', (e) => {
     style.value.left = e.clientX + 'px';
 
     const parents = $(e.target).parents('[data-rcMenu],[data-rcMenu-name]')
-    parents.each((index, element) => {
-        const e = {target:element}
+    parents.each(findRcMenu)
+    findRcMenu(114514, e.target)
+
+    function findRcMenu(index, element) {
+        const e = { target: element }
         if (e.target.getAttribute('data-rcMenu')) {
             elActions.value = JSON.parse(e.target.getAttribute('data-rcMenu') || 'null');
         } else if (
@@ -40,25 +43,24 @@ $(document.body).on('contextmenu', (e) => {
                 }
             ];
         } else {
-            console.log()
+            if (!index === 114514) console.log('Error', { parents: parents, elActions: elActions })
+            elActions.value = []
         }
-    })
+        //console.log({ parents: parents, elActions: elActions })
+    }
 
 
-    $('#rcMenu').show('fast');
+    $('#rcMenu').fadeIn(300)
 });
 
 document.addEventListener('click', () => {
-    $('#rcMenu').hide('fast');
+    $('#rcMenu').fadeOut(300)
 });
 </script>
 
 <template>
     <div id='rcMenu' class='dropdown-menu' :style='style'>
-        <a v-for='el in actions' :key='el.name' :href='el.href' class='dropdown-item'
-        >{{ el.name }}
-        </a>
-        <a v-for='el in elActions' :key='el.name' :href='el.href' class='dropdown-item'
+        <a v-for='el in [actions,elActions].flat()' :key='el.name' :href='el.href' class='dropdown-item'
         >{{ el.name }}
         </a>
     </div>
