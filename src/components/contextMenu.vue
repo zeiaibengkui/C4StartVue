@@ -1,3 +1,4 @@
+
 <script setup lang='ts'>
 import { ref } from 'vue';
 
@@ -43,23 +44,23 @@ $(document.body).on('contextmenu', (e) => {
                 }
             ];
         } else {
-            if (!index === 114514) console.log('Error', { parents: parents, elActions: elActions })
+            if (index !== 114514) console.log('Error', { parents: parents, elActions: elActions })
             elActions.value = []
         }
         //console.log({ parents: parents, elActions: elActions })
     }
 
-
-    $('#rcMenu').fadeIn(300)
+    $('#rcMenu')[0].style.display = 'none'
+    $('#rcMenu').fadeIn('fast')
 });
 
 document.addEventListener('click', () => {
-    $('#rcMenu').fadeOut(300)
+    $('#rcMenu').fadeOut('fast')
 });
 </script>
 
 <template>
-    <div id='rcMenu' class='dropdown-menu' :style='style'>
+    <div id='rcMenu' class='dropdown-menu shadow' :style='style'>
         <a v-for='el in [actions,elActions].flat()' :key='el.name' :href='el.href' class='dropdown-item'
         >{{ el.name }}
         </a>

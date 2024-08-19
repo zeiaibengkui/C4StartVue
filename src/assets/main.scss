@@ -4,10 +4,15 @@ body,
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--bs-primary);
     scroll-behavior: smooth;
+}
+
+body,button,select{
+    text-shadow: 0 0 3px var(--bs-body-bg);
 }

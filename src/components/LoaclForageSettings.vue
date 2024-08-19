@@ -82,36 +82,45 @@
 </template>
 
 <script setup lang="ts">
-import localforage from 'localforage';
-import swal from 'sweetalert';
-import { ref, watch } from 'vue';
-import otherSettings from './OtherSettings.ts';
+import localforage from 'localforage'
+import swal from 'sweetalert'
+import { ref, watch } from 'vue'
+import otherSettings from './OtherSettings.ts'
 
 const bomb = () => {
     localforage.clear().then(() => {
-        bombed.value = true;
-        swal('Your data has been cleared!');
-    });
-};
+        bombed.value = true
+        swal({
+            title: 'Your data has been cleared!',
+            icon: 'success',
+            buttons: ['not now', 'reload']
+        }).then((btn) => {
+            if (btn) {
+                //console.log(btn)
+                location.reload()
+            }
+        })
+    })
+}
 
-const fire = ref(true);
-const progress = ref(0);
-const bombed = ref(false);
-var running: number;
+const fire = ref(true)
+const progress = ref(0)
+const bombed = ref(false)
+var running: number
 watch(fire, async (n) => {
     if (!n) {
         running = setInterval(function () {
             if (progress.value >= 100) {
-                bomb();
-                fire.value = true;
+                bomb()
+                fire.value = true
             }
-            progress.value += 20;
-        }, 1000);
+            progress.value += 20
+        }, 1000)
     } else {
-        clearInterval(running);
-        progress.value = 0;
+        clearInterval(running)
+        progress.value = 0
     }
-});
+})
 </script>
 
 <style scoped>

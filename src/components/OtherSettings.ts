@@ -3,6 +3,8 @@ const otherSettings = [
     { name: 'LoaclForageSettings', href: '#LoaclForageSettings' }
 ];
 
+/* (globalThis as any)['otherSettings'] = otherSettings; */
+
 export default otherSettings;
 {
     /* 

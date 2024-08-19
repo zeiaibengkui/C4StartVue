@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import localforage from 'localforage';
-import { effectScope,  ref, watch } from 'vue';
-import otherSettings from './OtherSettings.ts';
+import { effectScope, ref, watch } from 'vue';
+import otherSettings from './OtherSettings';
+/* import otherSettings from './OtherSettings.ts'; */
 
 const bgIframeURL = ref('about:blank');
-const bgIframeDisplay = ref(true);
+const bgIframeDisplay = ref(false);
 const bgVideoURL = ref('about:blank');
-const bgVideoDisplay = ref(true);
+const bgVideoDisplay = ref(false);
 const waitToChange = ref(true);
 const bgStyle = ref({
     backgroundImage: 'initial',
@@ -29,7 +30,7 @@ effectScope().run(() => {
         await localforage.setItem('wallpaper', toRealValue(newValue));
     });
     a.forEach(async (el: any, index: number) => {
-        var saved: Array<any> | null = await localforage.getItem('wallpaper');
+        const saved: Array<any> | null = await localforage.getItem('wallpaper');
         if (saved) el.value = saved[index];
     });
 });
@@ -46,12 +47,12 @@ effectScope().run(() => {
             id="bgVideo"
             preload="none"
             :src="bgVideoURL"
-            :style="{ display: bgVideoDisplay ? 'block' : 'none', pointerEvents: 'none' }"
+            :style="{ display: bgVideoDisplay ? 'block' : 'none' }"
         ></video>
         <iframe
             id="bgIframe"
             :src="bgIframeURL"
-            :style="{ display: bgIframeDisplay ? 'block' : 'none', pointerEvents: 'none' }"
+            :style="{ display: bgIframeDisplay ? 'block' : 'none' }"
         ></iframe>
 
         <!-- Modal trigger button -->
@@ -100,8 +101,9 @@ effectScope().run(() => {
                         >
                             <div style="position: sticky; top: 0">
                                 <a class="nav-link" href="#bgStyle">bgStyle</a>
-                                <a class="nav-link" href="#bgIframea">bgIframe</a>
-                                <a class="nav-link" href="#bgVideoa">bgVideo</a>
+                                <a class="nav-link" href="#bgIframeSet">bgIframe</a>
+                                <a class="nav-link" href="#bgVideoSet">bgVideo</a>
+                                <hr />
                                 <a
                                     v-for="el in otherSettings"
                                     data-bs-toggle="modal"
@@ -145,7 +147,7 @@ effectScope().run(() => {
                                                     v-model="bgStyle[key]"
                                                     :type="'text'"
                                                     class="form-control"
-                                                    :id="bgStyle[key] + index"
+                                                    :id="value + index"
                                                 />
                                             </td>
                                         </tr>
@@ -154,7 +156,7 @@ effectScope().run(() => {
                             </div>
 
                             <h2>bgIframe</h2>
-                            <div class="input-group" id="bgIframea">
+                            <div class="input-group" id="bgIframeSet">
                                 <div class="input-group-text">
                                     <input
                                         type="checkbox"
@@ -176,7 +178,7 @@ effectScope().run(() => {
                             </div>
 
                             <h2>bgVideo</h2>
-                            <div class="input-group" id="bgVideoa">
+                            <div class="input-group" id="bgVideoSet">
                                 <div class="input-group-text">
                                     <input
                                         type="checkbox"
@@ -225,14 +227,12 @@ effectScope().run(() => {
     height: 100%;
     display: block;
 }
+
 #bgVideo,
 #bgIframe {
     z-index: 0;
 }
-#bgStylePre {
-    text-wrap: nowrap;
-    height: 16.1rem;
-}
+
 #bgStyle ~ h2 {
     margin-top: 2.5rem;
 }

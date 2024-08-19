@@ -1,24 +1,29 @@
-<template>
-    <div class='drag' onmouseover="$('.drag').parent().draggable({ scroll: false, handle: '.drag' });">: : : :</div>
-</template>
+<script setup>
+import { onMounted } from 'vue'
 
-<script>
-
-
-
+onMounted(function () {
+    $(document).ready(function () {
+        $('.drag').parent().draggable({ scroll: false, handle: '.drag' })
+    })
+})
 </script>
 
-<style scoped lang='scss'>
+<template>
+    <div class="drag" onmousedown="">: : : :</div>
+</template>
+
+<style scoped lang="scss">
 .drag {
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -8px;
-    cursor: grab;
     font-size: 8px;
+    font-weight: bold;
     text-shadow: var(--bs-body-bg) 1px 1px;
     display: flex;
     justify-content: center;
-    width: 16px;
+    width: 20px;
+    margin-left: -10px;
+    cursor: grab;
 }
 </style>

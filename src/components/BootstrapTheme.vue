@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import * as bootstrap from 'bootstrap'
 
 const bsTheme = ref('dark');
 var saved = localStorage.getItem('bsTheme');
@@ -16,6 +17,12 @@ watch(bsTheme, function (newv) {
     document.body.setAttribute('data-bs-theme', newv);
     localStorage.setItem('bsTheme', newv);
 });
+
+
+const tooltipTriggerList = document.querySelectorAll('[title]');
+[...tooltipTriggerList].map(
+  (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+)
 </script>
 
 <style scoped>
@@ -23,5 +30,6 @@ watch(bsTheme, function (newv) {
     position: absolute;
     top: 0;
     right: 0;
+    text-shadow: 1px 1px 2px var(--bs-body-bg);
 }
 </style>

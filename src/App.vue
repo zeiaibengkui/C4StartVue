@@ -3,7 +3,7 @@ import SearchBar from './components/SearchBar.vue';
 import WallPaper from './components/WallPaper.vue';
 import BootstrapTheme from './components/BootstrapTheme.vue';
 import LoaclForageSettings from './components/LoaclForageSettings.vue';
-import ContentextMenu from './components/contentextMenu.vue';
+import ContextMenu from './components/contextMenu.vue';
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import ContentextMenu from './components/contentextMenu.vue';
     <SearchBar></SearchBar>
     <BootstrapTheme></BootstrapTheme>
     <LoaclForageSettings></LoaclForageSettings>
-    <ContentextMenu></ContentextMenu>
+    <ContextMenu></ContextMenu>
 </template>
 
 <style scoped></style>
