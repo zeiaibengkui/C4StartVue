@@ -1,28 +1,32 @@
 <template>
-    <select class="btn" id="bsTheme" v-model="bsTheme">
-        <option>light</option>
-        <option>dark</option>
-    </select>
+    <!--<select class="btn" id="bsTheme" v-model="bsTheme">
+            <option value="light">&#xF1D1;</option>
+            <option value="dark">&#xF495;</option>
+        </select>-->
+    <button class='btn' type='button' id='bsTheme' @click='themeBoolean = !themeBoolean'>
+        {{ themeBoolean ? '&#xF1D1;' : '&#xF495;' }}
+    </button>
 </template>
 
-<script setup lang="ts">
-import { ref, watch } from 'vue';
+<script setup lang='ts'>
+import { ref, watch } from 'vue'
 import * as bootstrap from 'bootstrap'
 
-const bsTheme = ref('dark');
-var saved = localStorage.getItem('bsTheme');
-if (saved) bsTheme.value = saved;
-document.body.setAttribute('data-bs-theme', bsTheme.value);
-watch(bsTheme, function (newv) {
-    document.body.setAttribute('data-bs-theme', newv);
-    localStorage.setItem('bsTheme', newv);
-});
+const themeBoolean = ref(false)
+watch(themeBoolean, function(newValue) {
+    bsTheme.value = newValue ? 'light' : 'dark'
+})
+const bsTheme = ref('dark')
+const saved = localStorage.getItem('bsTheme')
+if (saved) bsTheme.value = saved
+document.body.setAttribute('data-bs-theme', bsTheme.value)
+watch(bsTheme, function(newV) {
+    document.body.setAttribute('data-bs-theme', newV)
+    localStorage.setItem('bsTheme', newV)
+})
 
-
-const tooltipTriggerList = document.querySelectorAll('[title]');
-[...tooltipTriggerList].map(
-  (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-)
+const tooltipTriggerList = document.querySelectorAll('[title]')
+;[...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
 
 <style scoped>
@@ -30,6 +34,7 @@ const tooltipTriggerList = document.querySelectorAll('[title]');
     position: absolute;
     top: 0;
     right: 0;
-    text-shadow: 1px 1px 2px var(--bs-body-bg);
+    text-shadow: 0 0 4px var(--bs-body-bg);
+    font-family: 'bootstrap-icons', sans-serif;
 }
 </style>

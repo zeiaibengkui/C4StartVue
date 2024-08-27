@@ -1,11 +1,11 @@
 const otherSettings = [
     { name: 'bgSettings', href: '#bgSettings' },
     { name: 'LoaclForageSettings', href: '#LoaclForageSettings' }
-];
+]
 
 /* (globalThis as any)['otherSettings'] = otherSettings; */
 
-export default otherSettings;
+export default otherSettings
 {
     /* 
     <a

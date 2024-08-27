@@ -94,9 +94,8 @@ const bomb = () => {
             title: 'Your data has been cleared!',
             icon: 'success',
             buttons: ['not now', 'reload']
-        }).then((btn) => {
+        }).then((btn: any) => {
             if (btn) {
-                //console.log(btn)
                 location.reload()
             }
         })

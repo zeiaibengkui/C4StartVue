@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import localforage from 'localforage';
-import { effectScope, ref, watch } from 'vue';
-import otherSettings from './OtherSettings';
+import localforage from 'localforage'
+import { effectScope, ref, watch } from 'vue'
+import otherSettings from './OtherSettings'
 /* import otherSettings from './OtherSettings.ts'; */
 
-const bgIframeURL = ref('about:blank');
-const bgIframeDisplay = ref(false);
-const bgVideoURL = ref('about:blank');
-const bgVideoDisplay = ref(false);
-const waitToChange = ref(true);
+const bgIframeURL = ref('about:blank')
+const bgIframeDisplay = ref(false)
+const bgVideoURL = ref('about:blank')
+const bgVideoDisplay = ref(false)
+const waitToChange = ref(true)
 const bgStyle = ref({
-    backgroundImage: 'initial',
+    backgroundImage: 'url(/wallpaper.png)',
     backgroundPositionX: 'initial',
     backgroundPositionY: 'initial',
     backgroundSize: 'cover',
@@ -19,21 +19,21 @@ const bgStyle = ref({
     backgroundOrigin: 'initial',
     backgroundClip: 'initial',
     backgroundColor: '#bcd'
-});
+})
 
 function toRealValue(value: any) {
-    return JSON.parse(JSON.stringify(value));
+    return JSON.parse(JSON.stringify(value))
 }
-const a = [bgStyle, bgIframeDisplay, bgIframeURL, waitToChange];
+const a = [bgStyle, bgIframeDisplay, bgIframeURL, waitToChange]
 effectScope().run(() => {
     watch(a, async (newValue) => {
-        await localforage.setItem('wallpaper', toRealValue(newValue));
-    });
+        await localforage.setItem('wallpaper', toRealValue(newValue))
+    })
     a.forEach(async (el: any, index: number) => {
-        const saved: Array<any> | null = await localforage.getItem('wallpaper');
-        if (saved) el.value = saved[index];
-    });
-});
+        const saved: Array<any> | null = await localforage.getItem('wallpaper')
+        if (saved) el.value = saved[index]
+    })
+})
 </script>
 
 <template>
@@ -71,10 +71,8 @@ effectScope().run(() => {
             class="modal fade"
             id="bgSettings"
             tabindex="-1"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
             role="dialog"
-            aria-labelledby="modalTitleId"
+            aria-labelledby="wpsTitleId"
             aria-hidden="true"
         >
             <div
@@ -84,7 +82,7 @@ effectScope().run(() => {
             >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title" id="modalTitleId">Wallpaper Settings</h1>
+                        <h1 class="modal-title" id="wpsTitleId">Wallpaper Settings</h1>
                         <button
                             type="button"
                             class="btn-close"

@@ -12,22 +12,19 @@ const props = defineProps(['text'])
 
 let suggestionsList: Ref<[{ text: string; url: string }]> | Array<{ text: string; url: string }>
 
-const sleep = (delaytime = 1000) => {
-    return new Promise((resolve) => setTimeout(resolve, delaytime))
-}
-
 watch(props, loadSuggest)
 
-async function loadSuggest(reText: any) {
+function loadSuggest(reText: any) {
     let text = props.text
     let er = false
     let result
+    let list2: Array<{ text: string; url: string }> = []
 
     try {
         if (typeof reText !== 'string') {
-            result = await $.ajax({
+            result = $.ajax({
                 url: `http://localhost:8012/proxy/AS/Suggestions?pt=page.home&mkt=zh-cn&qry=${text}&cp=1&msbqf=false&cvid=1`
-            })
+            }).responseText
         } else {
             result = reText
             er = true
@@ -36,7 +33,6 @@ async function loadSuggest(reText: any) {
         const html = $.parseHTML(result)[0]
         const list: Array<HTMLElement> = Array.from(html.childNodes as any)
         //;(suggestionsList as any) = []
-        let list2: any = []
         list.forEach((el, index) => {
             let url: string
             try {
@@ -58,13 +54,23 @@ async function loadSuggest(reText: any) {
         result = (error as any).responseText
         if (er) {
             console.log('No search suggestion', error)
-            suggestionsList = [{ text: 'No result', url: '' }]
+            suggestionsList = list2 = [{ text: 'No result', url: '' }]
         } else {
             //console.log('Result:', result)
-            loadSuggest(result)
+            //loadSuggest(result)
         }
     }
+
+    /* $('#suggestions').html('')
+    list2.forEach((value) => {
+        let el = document.createElement('li')
+        let text = document.createTextNode(value.text)
+        el.appendChild(text)
+        el.setAttribute('data-url', value.url)
+        $(el).appendTo('#suggestions')
+    }) */
 }
+
 </script>
 <style scoped lang="scss">
 #suggestions {

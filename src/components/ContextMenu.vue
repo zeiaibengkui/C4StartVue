@@ -1,48 +1,48 @@
-
-<script setup lang='ts'>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Dropdown } from 'bootstrap'
 
 const style = ref({
     top: '0px',
     left: '0px'
-});
-const actions = ref([{ name: 'rcMenu', href: 'javascript:console.log("You Opened rcMenu!");' }]);
-const elActions = ref([{ name: 'Name', href: '#' }]);
+})
+const actions = ref([{ name: 'rcMenu', href: 'javascript:console.log("You Opened rcMenu!");' }])
+const elActions = ref([{ name: 'Name', href: '#' }])
 
 $(document.body).on('contextmenu', (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    style.value.top = e.clientY + 'px';
-    style.value.left = e.clientX + 'px';
+    style.value.top = e.clientY + 'px'
+    style.value.left = e.clientX + 'px'
 
     const parents = $(e.target).parents('[data-rcMenu],[data-rcMenu-name]')
     parents.each(findRcMenu)
     findRcMenu(114514, e.target)
 
-    function findRcMenu(index, element) {
+    function findRcMenu(index: number, element: any) {
         const e = { target: element }
         if (e.target.getAttribute('data-rcMenu')) {
-            elActions.value = JSON.parse(e.target.getAttribute('data-rcMenu') || 'null');
+            elActions.value = JSON.parse(e.target.getAttribute('data-rcMenu') || 'null')
         } else if (
-          e.target.getAttribute('data-rcMenu-name') &&
-          e.target.getAttribute('data-rcMenu-href')
+            e.target.getAttribute('data-rcMenu-name') &&
+            e.target.getAttribute('data-rcMenu-href')
         ) {
             elActions.value = [
                 {
                     name: e.target.getAttribute('data-rcMenu-name') || '',
                     href: e.target.getAttribute('data-rcMenu-href') || ''
                 }
-            ];
+            ]
         } else if (
-          e.target.getAttribute('data-rcMenu-name') &&
-          e.target.getAttribute('data-rcMenu-js')
+            e.target.getAttribute('data-rcMenu-name') &&
+            e.target.getAttribute('data-rcMenu-js')
         ) {
             elActions.value = [
                 {
                     name: e.target.getAttribute('data-rcMenu-name') || '',
                     href: 'javascript:' + e.target.getAttribute('data-rcMenu-js')
                 }
-            ];
+            ]
         } else {
             if (index !== 114514) console.log('Error', { parents: parents, elActions: elActions })
             elActions.value = []
@@ -52,17 +52,30 @@ $(document.body).on('contextmenu', (e) => {
 
     $('#rcMenu')[0].style.display = 'none'
     $('#rcMenu').fadeIn('fast')
-});
+    //toggleBtn.click()
+})
 
 document.addEventListener('click', () => {
     $('#rcMenu').fadeOut('fast')
-});
+})
+
+/* let toggleBtn:HTMLButtonElement
+onMounted(function() {
+    toggleBtn = document.querySelector('[aria-label=\'rcMenu\']')
+    const rcBS = new Dropdown(toggleBtn,{autoClose:'outside'})
+    console.log(rcBS)
+}) */
 </script>
 
 <template>
-    <div id='rcMenu' class='dropdown-menu shadow' :style='style'>
-        <a v-for='el in [actions,elActions].flat()' :key='el.name' :href='el.href' class='dropdown-item'
-        >{{ el.name }}
+    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label='rcMenu'>Menu</button> -->
+    <div id="rcMenu" class="dropdown-menu shadow" :style="style">
+        <a
+            v-for="el in [actions, elActions].flat()"
+            :key="el.name"
+            :href="el.href"
+            class="dropdown-item"
+            >{{ el.name }}
         </a>
     </div>
 </template>

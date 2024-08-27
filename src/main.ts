@@ -1,22 +1,24 @@
-import './assets/main.scss';
+import './assets/main.scss'
 import $ from 'jquery'
 import 'jquery-ui/dist/themes/base/jquery-ui.css'
-import 'bootstrap';
-import * as bootstrap from 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import 'bootstrap'
+import * as bootstrap from 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-void(bootstrap);
+const sleep = (delaytime = 1000) => {
+    return new Promise((resolve) => setTimeout(resolve, delaytime))
+}
 
-import App from './App.vue';
+void [bootstrap, sleep]
 
-const app = createApp(App);
+import App from './App.vue'
 
-app.use(createPinia());
-app.use($);
+const app = createApp(App)
 
-app.mount('#app');
+app.use(createPinia())
+app.use($)
 
-
+app.mount('#app')
