@@ -10,13 +10,21 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-import { onMounted, ref, type Ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref, type Ref, watch } from 'vue'
 import DragTool from './DragTool.vue'
+import { useAppFrameStore } from './Stores'
+
+const AppFrameStore = useAppFrameStore()
 
 const props = defineProps(['title', 'compent'])
 const dragEl = ref(document.createElement('div'))
 const drag: Ref = ref('span')
+
+watch(dragEl, function (newValue) {
+    //console.log(newValue)
+    drag.value = DragTool
+})
 
 const transparentFrame = (isThatTrue: boolean) => {
     if (!isThatTrue) return
@@ -24,10 +32,10 @@ const transparentFrame = (isThatTrue: boolean) => {
 }
 
 onMounted(() => {
-    drag.value = DragTool
-    let appNum = document.querySelectorAll('.app-frame').length
-    dragEl.value.style.top = (appNum + 1) * 2 + 'rem'
-    dragEl.value.style.left = (appNum + 1) * 2 + 'rem'
+    AppFrameStore.appNum += 1
+    //console.log(AppFrameStore.appNum)
+    dragEl.value.style.top = (AppFrameStore.appNum + 1) * 2 + 'rem'
+    dragEl.value.style.left = (AppFrameStore.appNum + 1) * 2 + 'rem'
 })
 </script>
 
@@ -45,6 +53,7 @@ onMounted(() => {
         text-shadow 0.2s;
     padding: 1rem;
     border-radius: var(--bs-border-radius);
+    resize: both;
 
     &.transparent-frame {
         min-width: 0;
@@ -77,7 +86,7 @@ onMounted(() => {
     &:hover:not(.transparent-frame) {
         background-color: #00000022;
         box-shadow: #00000022 0 0 5px 0;
-        z-index: 3;
+        //z-index: 3;
 
         > nav {
             opacity: 1;
@@ -90,9 +99,7 @@ onMounted(() => {
 }
 
 .app-compent {
-    width: 100%;
-    top: calc(2ex + 1.5rem);
-    bottom: 1rem;
+    inset: calc(2ex + 1.5rem) 1rem 1rem 1rem;
     position: absolute;
 }
 </style>

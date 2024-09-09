@@ -7,12 +7,7 @@ import DragTool from './DragTool.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import SearchSuggest from '@/components/SearchSuggest.vue'
 import type { ContentOptions } from 'sweetalert/typings/modules/options/content'
-
-void VueDraggable
-
-function toRealValue(value: any) {
-    return JSON.parse(JSON.stringify(value))
-}
+import { toRealValue } from '@/main'
 
 let target = ref('_blank')
 let text = ref('')

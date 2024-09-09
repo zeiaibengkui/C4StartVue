@@ -1,31 +1,36 @@
-<script setup lang="ts">
-import type { Ref } from 'vue'
+<script setup lang='ts'>
 import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps(['el'])
 const child = ref()
 let parent: HTMLElement
 
-watch(props,mount)
+watch(props, mount)
 onMounted(mount)
 
 function mount() {
+    try {
+        $(parent).draggable('destroy')
+    } catch (er) {
+        //console.log(parent)
+    }
     if (props.el) {
         parent = props.el
     } else {
         parent = $(child.value).parent()[0]
     }
-    $(document).ready(function() {
+    $(document).on('DOMContentLoaded',function() {
         $(parent).draggable({ scroll: false, handle: '.drag' })
+        $(parent).resizable()
     })
 }
 </script>
 
 <template>
-    <div class="drag" ref="child">: : : :</div>
+    <div class='drag' ref='child'>: : : :</div>
 </template>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .drag {
     position: absolute;
     top: 0;

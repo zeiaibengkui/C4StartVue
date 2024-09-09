@@ -1,91 +1,54 @@
 <template>
-    <!-- Button trigger modal -->
-    <!-- <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#LoaclForageSettings"
-    >
-        LoaclForageSettings
-    </button> -->
-
-    <!-- Modal -->
-    <div
-        class="modal-lg modal fade"
-        id="LoaclForageSettings"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="LoaclForageSettingsTitleId"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="LoaclForageSettingsTitleId">
-                        LoaclForage Settings
-                    </h2>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body" id="lfs-body">
-                    <nav
-                        class="col-3 flex-column align-items-stretch pe-4 border-end me-4"
-                        style="width: max-content"
-                    >
-                        <a
-                            v-for="el in otherSettings"
-                            data-bs-toggle="modal"
-                            :key="el.name"
-                            class="nav-link"
-                            :href="el.href"
-                            >{{ el.name }}</a
-                        >
-                    </nav>
-                    <button
-                        class="btn btn-outline-warning"
-                        data-bs-toggle="button"
-                        @click="fire = !fire"
-                    >
-                        {{ fire ? 'Fire' : 'Cancel' }}
-                    </button>
-                    <div
-                        class="progress w-25"
-                        role="progressbar"
-                        aria-label="progress"
-                        :aria-valuenow="progress"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                    >
-                        <div
-                            class="progress-bar progress-bar-striped bg-danger"
-                            :style="{ width: progress + '%' }"
-                        >
-                            {{ 'left:' + (6 - progress / 20) + 's' }}
-                        </div>
-                    </div>
-                    <button class="btn btn-danger" id="clearNow" @click="bomb">
-                        {{ bombed ? 'Succeed' : 'CLEAR NOW' }}
-                    </button>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                </div>
+    <div class="modal-body" id="lfs-body">
+        <button class="btn btn-outline-warning fire" data-bs-toggle="button" @click="fire = !fire">
+            {{ fire ? 'Fire' : 'Cancel' }}
+        </button>
+        <div
+            class="progress w-50"
+            role="progressbar"
+            aria-label="progress"
+            :aria-valuenow="progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+        >
+            <div
+                class="progress-bar progress-bar-striped bg-danger"
+                :style="{ width: progress + '%' }"
+            >
+                {{ 'left:' + (6 - progress / 20) + 's' }}
             </div>
         </div>
+        <button class="btn btn-danger" id="clearNow" @click="bomb">
+            {{ bombed ? 'Succeed' : 'CLEAR NOW' }}
+        </button>
+    </div>
+
+    <div id="lfs-view" class="pt-5">
+        <h2>View <a class="btn float-end btn-secondary" @click="reload">Reload</a></h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Keys</th>
+                    <th scope="col">Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="" v-for="item in view" :key="item.key">
+                    <td>{{ item.key }}</td>
+                    <td style="width: 30rem; display: block">
+                        <hljsVuePlugin.component autodetect :code="item.value + ''" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script setup lang="ts">
+import hljsVuePlugin from '@highlightjs/vue-plugin'
 import localforage from 'localforage'
 import swal from 'sweetalert'
-import { ref, watch } from 'vue'
-import otherSettings from './OtherSettings.ts'
+import { defineComponent, onMounted, ref, watch, type Ref } from 'vue'
 
 const bomb = () => {
     localforage.clear().then(() => {
@@ -120,6 +83,26 @@ watch(fire, async (n) => {
         progress.value = 0
     }
 })
+
+const view: Ref<
+    | {
+          key: string
+          value: unknown
+      }[]
+    | undefined
+> = ref([])
+
+const reload = async () => {
+    let keys = await localforage.keys()
+    view.value = []
+    keys.forEach(async (el, index) => {
+        view.value?.push({
+            key: el,
+            value: await localforage.getItem(el)
+        })
+    })
+}
+reload()
 </script>
 
 <style scoped>
@@ -131,7 +114,15 @@ watch(fire, async (n) => {
 
 #lfs-body {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+
+    > button {
+        width: 8rem;
+    }
+
+    .fire {
+        width: 5rem;
+    }
 }
 </style>

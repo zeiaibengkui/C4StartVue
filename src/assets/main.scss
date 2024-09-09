@@ -9,10 +9,23 @@ body,
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--bs-primary);
+    scrollbar-color: transparent transparent;
+    scroll-behavior: smooth;
+    transition: scrollbar-color 0.1s ease-out;
+}
+
+*:hover {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-primary) transparent;
     scroll-behavior: smooth;
 }
 
+code.hljs {
+    color: var(--bs-code-color);
+    background-color: color-mix(in srgb, var(--bs-body-bg), var(--bs-body-color) 10%);
+    //box-shadow: var(--bs-code-color) 0 0 5px 0px inset;
+    //border-radius: 5px;
+}
 /* body,button,select{
     text-shadow: 0 0 3px var(--bs-body-bg);
 } */

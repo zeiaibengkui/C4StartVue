@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import localforage from 'localforage'
 import { effectScope, ref, watch } from 'vue'
-import otherSettings from './OtherSettings'
-/* import otherSettings from './OtherSettings.ts'; */
+import RcMenuItem from './rcMenuItem.vue'
+import $ from 'jquery'
 
 const bgIframeURL = ref('about:blank')
 const bgIframeDisplay = ref(false)
@@ -37,12 +37,15 @@ effectScope().run(() => {
 </script>
 
 <template>
-    <div
-        id="wallPaper"
-        :style="bgStyle"
-        data-rcMenu-name="Wallpaper Settings"
-        data-rcMenu-js="$('#wallpaperToggle').click()"
-    >
+    <div id="wallPaper" :style="bgStyle">
+        <RcMenuItem
+            :value="{
+                name: 'Wallpaper Settings',
+                callback: (e) => {
+                    $(`[data-bs-target=&quot;#v-pills-wallpaper&quot;]`)[0].click()
+                }
+            }"
+        ></RcMenuItem>
         <video
             id="bgVideo"
             preload="none"
@@ -54,162 +57,75 @@ effectScope().run(() => {
             :src="bgIframeURL"
             :style="{ display: bgIframeDisplay ? 'block' : 'none' }"
         ></iframe>
+    </div>
 
-        <!-- Modal trigger button -->
-        <button
-            type="button"
-            class="btn z-1 position-fixed"
-            data-bs-toggle="modal"
-            data-bs-target="#bgSettings"
-            id="wallpaperToggle"
-        >
-            <i class="bi bi-sliders"></i>
-        </button>
+    <Teleport to="#v-pills-wallpaper">
+        <div class="col" id="wallpaper-settings">
+            <h2>
+                bgStyle<button
+                    class="btn"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#bgStyle"
+                    aria-expanded="true"
+                    aria-controls="bgStyle"
+                >
+                    <i class="bi bi-arrow-down"></i>
+                </button>
+            </h2>
+            <ul id="bgStyle" class="collapse show list-group">
+                <li class="list-group-item" v-for="(value, key, index) in bgStyle" :key="key">
+                    <label class="" :for="bgStyle[key] + index"> {{ key }}</label>
 
-        <!-- Modal Body -->
-        <div
-            class="modal fade"
-            id="bgSettings"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="wpsTitleId"
-            aria-hidden="true"
-        >
-            <div
-                class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
-                role="document"
-                id="wp-d"
-            >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="wpsTitleId">Wallpaper Settings</h1>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                            data-bs-toggle="tooltip"
-                            title="Remember to save!"
-                        ></button>
-                    </div>
-                    <div class="modal-body row">
-                        <nav
-                            class="col-3 flex-column align-items-stretch pe-4 border-end"
-                            style="width: max-content"
-                        >
-                            <div style="position: sticky; top: 0">
-                                <a class="nav-link" href="#bgStyle">bgStyle</a>
-                                <a class="nav-link" href="#bgIframeSet">bgIframe</a>
-                                <a class="nav-link" href="#bgVideoSet">bgVideo</a>
-                                <hr />
-                                <a
-                                    v-for="el in otherSettings"
-                                    data-bs-toggle="modal"
-                                    :key="el.name"
-                                    class="nav-link"
-                                    :href="el.href"
-                                    >{{ el.name }}</a
-                                >
-                            </div>
-                        </nav>
+                    <input
+                        v-model="bgStyle[key]"
+                        :type="'text'"
+                        class="form-control float-end w-auto"
+                        :id="value + index"
+                    />
+                </li>
+            </ul>
 
-                        <div class="col">
-                            <h2>
-                                bgStyle<button
-                                    class="btn"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#bgStyle"
-                                    aria-expanded="true"
-                                    aria-controls="bgStyle"
-                                >
-                                    <i class="bi bi-arrow-down"></i>
-                                </button>
-                            </h2>
-                            <div id="bgStyle" class="collapse show">
-                                <table class="table">
-                                    <tbody>
-                                        <tr
-                                            class=""
-                                            v-for="(value, key, index) in bgStyle"
-                                            :key="key"
-                                            role="group"
-                                            aria-label="input group"
-                                        >
-                                            <td class="" style="width: 15rem; padding: 0.875rem">
-                                                <label :for="bgStyle[key] + index">
-                                                    {{ key }}</label
-                                                >
-                                            </td>
-                                            <td>
-                                                <input
-                                                    v-model="bgStyle[key]"
-                                                    :type="'text'"
-                                                    class="form-control"
-                                                    :id="value + index"
-                                                />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <h2>bgIframe</h2>
-                            <div class="input-group" id="bgIframeSet">
-                                <div class="input-group-text">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input mt-0"
-                                        v-model="bgIframeDisplay"
-                                        id="bgIframeDisplay"
-                                    />
-                                </div>
-                                <label for="bgIframeURL" class="input-group-text"
-                                    >bgIframeURL
-                                </label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="bgIframeURL"
-                                    id="bgIframeURL"
-                                    placeholder="bgIframeURL"
-                                />
-                            </div>
-
-                            <h2>bgVideo</h2>
-                            <div class="input-group" id="bgVideoSet">
-                                <div class="input-group-text">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input mt-0"
-                                        v-model="bgVideoDisplay"
-                                        id="bgVideoDisplay"
-                                    />
-                                </div>
-                                <label for="bgVideoURL" class="input-group-text">bgVideoURL </label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="bgVideoURL"
-                                    id="bgVideoURL"
-                                    placeholder="bgVideoURL"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-dismiss="modal"
-                            @click="waitToChange = !waitToChange"
-                        >
-                            Save and Quit
-                        </button>
-                    </div>
+            <h2>bgIframe</h2>
+            <div class="input-group" id="bgIframeSet">
+                <div class="input-group-text">
+                    <input
+                        type="checkbox"
+                        class="form-check-input mt-0"
+                        v-model="bgIframeDisplay"
+                        id="bgIframeDisplay"
+                    />
                 </div>
+                <label for="bgIframeURL" class="input-group-text">bgIframeURL </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    v-model="bgIframeURL"
+                    id="bgIframeURL"
+                    placeholder="bgIframeURL"
+                />
+            </div>
+
+            <h2>bgVideo</h2>
+            <div class="input-group" id="bgVideoSet">
+                <div class="input-group-text">
+                    <input
+                        type="checkbox"
+                        class="form-check-input mt-0"
+                        v-model="bgVideoDisplay"
+                        id="bgVideoDisplay"
+                    />
+                </div>
+                <label for="bgVideoURL" class="input-group-text">bgVideoURL </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    v-model="bgVideoURL"
+                    id="bgVideoURL"
+                    placeholder="bgVideoURL"
+                />
             </div>
         </div>
-    </div>
+    </Teleport>
 </template>
 <script lang="ts"></script>
 <style scoped>
@@ -217,6 +133,7 @@ effectScope().run(() => {
 #bgVideo,
 #bgIframe {
     position: absolute;
+    z-index: 0;
     top: 0;
     bottom: 0;
     left: 0;
