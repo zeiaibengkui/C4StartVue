@@ -9,6 +9,8 @@ import SearchSuggest from '@/components/SearchSuggest.vue'
 import type { ContentOptions } from 'sweetalert/typings/modules/options/content'
 import { toRealValue } from '@/main'
 
+defineExpose({ transparentFrame: true })
+
 let target = ref('_blank')
 let text = ref('')
 let engines = ref([
@@ -46,11 +48,6 @@ const addEngine = async () => {
         })
     }
 }
-defineExpose({
-    target,
-    engines,
-    selectedEngine
-})
 
 let efSc = effectScope()
 efSc.run(async () => {
@@ -142,7 +139,7 @@ onMounted(() => {
 
             <input class="btn btn-outline-primary" type="submit" value="GO!" />
         </div>
-        <DragTool />
+        <DragTool :draggable="true" />
         <SearchSuggest :text="text" />
     </form>
 </template>

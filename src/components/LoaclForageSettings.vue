@@ -29,14 +29,24 @@
             <thead>
                 <tr>
                     <th scope="col">Keys</th>
-                    <th scope="col">Values</th>
+                    <th scope="col">Values&ensp;(to JSON)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="" v-for="item in view" :key="item.key">
-                    <td>{{ item.key }}</td>
-                    <td style="width: 30rem; display: block">
-                        <hljsVuePlugin.component autodetect :code="item.value + ''" />
+                    <td>
+                        {{ item.key }}
+                        <button
+                            class="btn btn-link nav-link bi bi-pen lfs-edit"
+                            @click="edit($event, item.key)"
+                        ></button>
+                    </td>
+                    <td style="width: 30rem">
+                        <hljsVuePlugin.component
+                            autodetect
+                            :code="JSON.stringify(item.value, null, 4)"
+                            class=""
+                        />
                     </td>
                 </tr>
             </tbody>
@@ -48,7 +58,7 @@
 import hljsVuePlugin from '@highlightjs/vue-plugin'
 import localforage from 'localforage'
 import swal from 'sweetalert'
-import { defineComponent, onMounted, ref, watch, type Ref } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 
 const bomb = () => {
     localforage.clear().then(() => {
@@ -68,7 +78,7 @@ const bomb = () => {
 const fire = ref(true)
 const progress = ref(0)
 const bombed = ref(false)
-var running: number
+let running: number
 watch(fire, async (n) => {
     if (!n) {
         running = setInterval(function () {
@@ -87,25 +97,39 @@ watch(fire, async (n) => {
 const view: Ref<
     | {
           key: string
-          value: unknown
+          value: any
       }[]
     | undefined
 > = ref([])
 
+const edit = async (e: Event, key: string) => {
+    localforage.setItem(
+        key,
+
+        await swal({
+            content: 'input',
+            text: 'value'
+        })
+    )
+    reload()
+}
+
 const reload = async () => {
     let keys = await localforage.keys()
     view.value = []
-    keys.forEach(async (el, index) => {
+    keys.forEach(async (el) => {
         view.value?.push({
             key: el,
             value: await localforage.getItem(el)
         })
     })
 }
-reload()
+onMounted(() => {
+    reload()
+})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 [data-bs-target='#LoaclForageSettings'] {
     position: absolute;
     top: 0;
@@ -123,6 +147,27 @@ reload()
 
     .fire {
         width: 5rem;
+    }
+}
+
+.lfs-edit {
+    opacity: 0;
+    transition: all 0.2s;
+    //inset: 0 -32.5px;
+    //position: relative;
+    width: 0;
+}
+
+#lfs-view {
+    pre {
+        margin: 0;
+    }
+    tr {
+        &:hover {
+            .lfs-edit {
+                opacity: 1;
+            }
+        }
     }
 }
 </style>

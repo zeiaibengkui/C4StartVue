@@ -1,5 +1,5 @@
 <template>
-    <div id="links" class="h-100">
+    <div id="links">
         <figure
             class="convenient-link-item rounded-3 btn"
             v-for="(item, index) in links"
@@ -7,8 +7,13 @@
             target="_blank"
             :href="item.url"
             @click="item.callback"
-            @contextmenu.prevent="links.splice(index, 1)"
         >
+            <RcMenuItem
+                :value="{
+                    callback: () => links.splice(index, 1),
+                    name: 'Delete'
+                }"
+            />
             <img
                 :src="item.icon"
                 class="convenient-link-item-img rounded-3"
@@ -17,17 +22,19 @@
 
             <figcaption class="card-text">{{ item.name }}</figcaption>
         </figure>
-
-        <ul class="nav nav-pills" id="links-pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link">1</button>
-            </li>
-        </ul>
     </div>
+    <ul class="nav nav-pills" id="num" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link">1</button>
+        </li>
+    </ul>
 </template>
 <script setup lang="ts">
 import { type Ref, ref } from 'vue'
 import { autoSave } from './Stores'
+import RcMenuItem from './rcMenuItem.vue'
+
+defineExpose({ draggable: true, resizeable: true })
 
 const links: Ref<
     {
@@ -63,15 +70,16 @@ autoSave([links], 'convent-links')
 </script>
 <style lang="scss">
 #links {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    height: calc(100% - 40px);
 
     .convenient-link-item {
         width: 4rem;
         padding: 0.5rem;
-        transition: background-color 0.2s;
-
+        margin: 0.5rem;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
+        color: var(--bs-body-color);
         &:hover {
             background-color: #ffffff22;
         }

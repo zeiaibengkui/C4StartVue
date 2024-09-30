@@ -14,7 +14,7 @@ import SettingBox from './components/SettingBox.vue'
     <WallPaper />
     <AppFrame :compent="ConvenientLinks" title="Links"></AppFrame>
     <AppFrame :compent="SearchBar" title="SearchBar"></AppFrame>
-    <BootstrapTheme />
+    <Suspense><BootstrapTheme /></Suspense>
     <ContextMenu />
 </template>
 

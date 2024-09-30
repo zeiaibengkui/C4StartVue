@@ -5,20 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import * as bootstrap from 'bootstrap'
+import localforage from 'localforage'
 
 const themeBoolean = ref(false)
-watch(themeBoolean, function (newValue) {
-    bsTheme.value = newValue ? 'light' : 'dark'
-})
-const bsTheme = ref('dark')
-const saved = localStorage.getItem('bsTheme')
-if (saved) bsTheme.value = saved
+const bsTheme = computed(() => (themeBoolean.value ? 'light' : 'dark'))
+const saved = await localforage.getItem('bsTheme')
+if (saved) themeBoolean.value = !!saved
 document.body.setAttribute('data-bs-theme', bsTheme.value)
-watch(bsTheme, function (newV) {
-    document.body.setAttribute('data-bs-theme', newV)
-    localStorage.setItem('bsTheme', newV)
+watch(themeBoolean, function (newV) {
+    document.body.setAttribute('data-bs-theme', bsTheme.value)
+    localforage.setItem('bsTheme', newV)
 })
 
 $(document).ready(() => {

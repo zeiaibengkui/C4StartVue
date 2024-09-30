@@ -2,16 +2,20 @@
     <div class="app-frame" ref="dragEl">
         <nav>
             <h2 class="app-title">{{ props.title }}</h2>
-            <DragTool :is="drag" :el="dragEl"></DragTool>
+            <DragTool
+                :el="dragEl"
+                :draggable="mountedCompent?.draggable"
+                :resizeable="mountedCompent?.resizeable"
+            ></DragTool>
         </nav>
         <div class="app-compent">
-            <compent :is="props.compent" @transparentFrame="transparentFrame"></compent>
+            <props.compent ref="mountedCompent" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, type Ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import DragTool from './DragTool.vue'
 import { useAppFrameStore } from './Stores'
 
@@ -19,17 +23,11 @@ const AppFrameStore = useAppFrameStore()
 
 const props = defineProps(['title', 'compent'])
 const dragEl = ref(document.createElement('div'))
-const drag: Ref = ref('span')
+const mountedCompent = ref()
 
-watch(dragEl, function (newValue) {
-    //console.log(newValue)
-    drag.value = DragTool
+watch(mountedCompent, (value) => {
+    if (value.transparentFrame) dragEl.value.classList.add('transparent-frame')
 })
-
-const transparentFrame = (isThatTrue: boolean) => {
-    if (!isThatTrue) return
-    dragEl.value.classList.add('transparent-frame')
-}
 
 onMounted(() => {
     AppFrameStore.appNum += 1
@@ -43,7 +41,6 @@ onMounted(() => {
 .app-frame {
     position: absolute;
     color: white;
-    text-shadow: black 0 0 2px;
     height: max-content;
     width: max-content;
     min-height: 309px;
@@ -72,6 +69,7 @@ onMounted(() => {
         font-size: 14pt;
         transition: opacity 0.2s;
         margin-bottom: 1rem;
+        text-shadow: black 0 0 2px;
 
         > h2 {
             font-size: inherit;

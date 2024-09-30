@@ -34,7 +34,7 @@ import LoaclForageSettings from './LoaclForageSettings.vue'
                 <div class="modal-body">
                     <div class="d-flex align-items-start row h-100">
                         <div
-                            class="nav flex-column nav-pills me-3 ms-3 col-auto position-sticky top-0"
+                            class="nav flex-column nav-pills pe-3 ps-3 col-auto position-sticky top-0"
                             id="v-pills-tab"
                             role="tablist"
                             aria-orientation="vertical"
@@ -63,8 +63,6 @@ import LoaclForageSettings from './LoaclForageSettings.vue'
                             >
                                 Wallpaper
                             </button>
-                            <!-- <button class="nav-link" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled" type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false" disabled>Disabled</button> -->
-                            <!-- <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button> -->
                             <button
                                 class="nav-link"
                                 id="v-pills-localforage-tab"
@@ -127,6 +125,11 @@ import LoaclForageSettings from './LoaclForageSettings.vue'
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
     --bs-nav-pills-link-active-bg: transparent;
+    color: var(--bs-body-color);
+
+    &.active {
+        text-shadow: var(--bs-body-bg) 0 0 3px;
+    }
 }
 
 .modal-dialog-scrollable .modal-content {

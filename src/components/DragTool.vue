@@ -1,36 +1,45 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
-const props = defineProps(['el'])
-const child = ref()
+const props = defineProps(['el', 'draggable', 'resizeable'])
+const child = ref(document.createElement('div'))
 let parent: HTMLElement
 
 watch(props, mount)
-onMounted(mount)
+onMounted(() => {
+    mount(props)
+})
 
-function mount() {
+function mount(value: any) {
+    console.log(value)
+
     try {
         $(parent).draggable('destroy')
     } catch (er) {
         //console.log(parent)
     }
-    if (props.el) {
+    if (value.el) {
         parent = props.el
     } else {
         parent = $(child.value).parent()[0]
     }
-    $(document).on('DOMContentLoaded',function() {
-        $(parent).draggable({ scroll: false, handle: '.drag' })
-        $(parent).resizable()
+    $(document).on('DOMContentLoaded', function () {
+        if (value.draggable) {
+            $(parent).draggable({ scroll: false, handle: '.drag' })
+        } else {
+            $(child.value).hide(0)
+        }
+
+        if (value.resizeable) $(parent).resizable({ autoHide: true })
     })
 }
 </script>
 
 <template>
-    <div class='drag' ref='child'>: : : :</div>
+    <div class="drag" ref="child">: : : :</div>
 </template>
 
-<style scoped lang='scss'>
+<style lang="scss">
 .drag {
     position: absolute;
     top: 0;
@@ -43,5 +52,6 @@ function mount() {
     width: 20px;
     margin-left: -10px;
     cursor: grab;
+    color: var(--bs-body-color);
 }
 </style>
