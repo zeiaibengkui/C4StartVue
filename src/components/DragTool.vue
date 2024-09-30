@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
-const props = defineProps(['el', 'draggable', 'resizeable'])
+const props = defineProps<{
+    el?: HTMLElement
+    draggable?: boolean
+    resizeable?: boolean
+}>()
 const child = ref(document.createElement('div'))
 let parent: HTMLElement
 
 watch(props, mount)
-onMounted(() => {
-    mount(props)
-})
+onMounted(mount)
 
-function mount(value: any) {
-    console.log(value)
-
+function mount(value: any = props) {
     try {
         $(parent).draggable('destroy')
     } catch (er) {
         //console.log(parent)
     }
     if (value.el) {
-        parent = props.el
+        parent = value.el
     } else {
         parent = $(child.value).parent()[0]
     }

@@ -1,5 +1,6 @@
 <template lang="html">
-    <div class="app-frame" ref="dragEl">
+    <div class="app-frame rounded-3" ref="dragEl">
+        <div class="blur-bg position-absolute rounded-3"></div>
         <nav>
             <h2 class="app-title">{{ props.title }}</h2>
             <DragTool
@@ -41,16 +42,22 @@ onMounted(() => {
 .app-frame {
     position: absolute;
     color: white;
-    height: max-content;
-    width: max-content;
-    min-height: 309px;
-    min-width: 500px;
+    width: 500px;
+    height: 309px;
+    min-height: 31px;
+    min-width: 50px;
     transition:
-        background-color 0.2s,
-        text-shadow 0.2s;
+        background-color 0.8s,
+        text-shadow 0.8s,
+        color 0.8s;
     padding: 1rem;
-    border-radius: var(--bs-border-radius);
-    resize: both;
+
+    .blur-bg {
+        inset: 0;
+        backdrop-filter: blur(30px);
+        opacity: 0;
+        transition: opacity 0.8s;
+    }
 
     &.transparent-frame {
         min-width: 0;
@@ -67,9 +74,11 @@ onMounted(() => {
         display: block;
         opacity: 0;
         font-size: 14pt;
-        transition: opacity 0.2s;
+        transition: opacity 0.8s;
         margin-bottom: 1rem;
         text-shadow: black 0 0 2px;
+        position: relative;
+        z-index: 1;
 
         > h2 {
             font-size: inherit;
@@ -84,9 +93,9 @@ onMounted(() => {
     &:hover:not(.transparent-frame) {
         background-color: #00000022;
         box-shadow: #00000022 0 0 5px 0;
-        //z-index: 3;
 
-        > nav {
+        > nav,
+        .blur-bg {
             opacity: 1;
         }
     }
@@ -99,5 +108,6 @@ onMounted(() => {
 .app-compent {
     inset: calc(2ex + 1.5rem) 1rem 1rem 1rem;
     position: absolute;
+    z-index: 2;
 }
 </style>

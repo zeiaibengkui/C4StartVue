@@ -27,6 +27,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^4.0.2",
     "sass": "^1.75.0",
     "server": "^1.0.39",
     "sever": "^0.0.2",

@@ -30,43 +30,13 @@
     </ul>
 </template>
 <script setup lang="ts">
-import { type Ref, ref } from 'vue'
-import { autoSave } from './Stores'
+import { type Ref, ref, toRef } from 'vue'
+import { autoSave, useLinksStore } from './Stores'
 import RcMenuItem from './rcMenuItem.vue'
 
 defineExpose({ draggable: true, resizeable: true })
 
-const links: Ref<
-    {
-        icon: string
-        name: string
-        url?: string
-        callback?: (event: any) => any
-    }[]
-> = ref([
-    {
-        icon: 'https://www.emojiall.com/images/60/htc/2795.png',
-        name: 'Add',
-        callback: async function () {
-            links.value.push({
-                icon: await swal({
-                    content: 'input',
-                    text: 'icon'
-                }),
-                name: await swal({
-                    content: 'input',
-                    text: 'name'
-                }),
-                url: await swal({
-                    content: 'input',
-                    text: 'url'
-                })
-            })
-        }
-    }
-])
-
-autoSave([links], 'convent-links')
+const links = toRef(useLinksStore().links)
 </script>
 <style lang="scss">
 #links {
@@ -75,7 +45,6 @@ autoSave([links], 'convent-links')
     .convenient-link-item {
         width: 4rem;
         padding: 0.5rem;
-        margin: 0.5rem;
         transition:
             background-color 0.2s,
             color 0.2s;
@@ -88,8 +57,10 @@ autoSave([links], 'convent-links')
             width: 100%;
             display: inline-block;
             height: 3rem;
+            box-sizing: border-box;
+            padding: 0.2rem;
             aspect-ratio: 1;
-            background-color: transparent;
+            background-color: color-mix(in srgb, var(--bs-body-bg) 20%, transparent);
         }
 
         .card-text {
@@ -98,6 +69,7 @@ autoSave([links], 'convent-links')
             white-space: nowrap;
             text-overflow: ellipsis;
             height: 2ex;
+            text-shadow: #00000022 2px 2px 1px;
             width: 100%;
         }
     }
